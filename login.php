@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    $stmt = $pdo->prepare(
-        'SELECT id, username, password FROM users WHERE username = :username'
+    $stmt = $pdo->prepare
+    ('SELECT id, username, password, role FROM users WHERE username = :username'
     );
     $stmt->execute(['username' => $username]);
     $user = $stmt->fetch();
@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role'];
 
         header('Location: index.php');
         exit;

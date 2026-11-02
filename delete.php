@@ -24,8 +24,21 @@ if (!$id || $id < 1) {
     exit;
 }
 
-$stmt = $pdo->prepare('DELETE FROM posts WHERE id = :id');
-$stmt->execute(['id' => $id]);
+if (is_admin()) {
+    $stmt = $pdo->prepare(
+        'DELETE FROM posts WHERE id = :id'
+    );
+    $stmt->execute(['id' => $id]);
+} else {
+    $stmt = $pdo->prepare(
+        'DELETE FROM posts
+         WHERE id = :id AND user_id = :user_id'
+    );
 
+    $stmt->execute([
+        'id' => $id,
+        'user_id' => $_SESSION['user_id']
+    ]);
+}
 header('Location: index.php');
 exit;

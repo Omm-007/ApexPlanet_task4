@@ -2,7 +2,7 @@
 <?php
 // Database connection settings
 $host = 'localhost';
-$dbname = 'blog';
+$dbname = 'blog_task4';
 $username = 'root';
 $password = '';
 
@@ -57,4 +57,8 @@ function verify_csrf() {
         http_response_code(403);
         exit('Invalid request. Please go back and try again.');
     }
+}
+// Check whether the logged-in user is an admin
+function is_admin() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }

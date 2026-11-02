@@ -24,13 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Title must be 255 characters or fewer.';
     } else {
         $stmt = $pdo->prepare(
-            'INSERT INTO posts (title, content) VALUES (:title, :content)'
-        );
+    'INSERT INTO posts (title, content, user_id)
+     VALUES (:title, :content, :user_id)'
+);
 
-        $stmt->execute([
-            'title' => $title,
-            'content' => $content
-        ]);
+$stmt->execute([
+    'title' => $title,
+    'content' => $content,
+    'user_id' => $_SESSION['user_id']
+]);
 
         header('Location: index.php');
         exit;

@@ -15,11 +15,20 @@ if (!$id || $id < 1) {
 }
 
 $stmt = $pdo->prepare(
-    'SELECT id, title, content FROM posts WHERE id = :id'
+    'SELECT id, title, content, user_id
+     FROM posts
+     WHERE id = :id'
 );
 $stmt->execute(['id' => $id]);
 $post = $stmt->fetch();
-
+if (
+    $post &&
+    (int)$post['user_id'] !== (int)$_SESSION['user_id'] &&
+    !is_admin()
+) {
+    http_response_code(403);
+    exit('You do not have permission to edit this post.');
+}
 if (!$post) {
     http_response_code(404);
     exit('Post not found.');

@@ -42,10 +42,13 @@ if ($search !== '') {
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
 } else {
-    $totalPosts = (int) $pdo->query(
-        'SELECT COUNT(*) FROM posts'
-    )->fetchColumn();
+    $countStmt = $pdo->prepare(
+    'SELECT COUNT(*) FROM posts'
+);
 
+$countStmt->execute();
+
+$totalPosts = (int) $countStmt->fetchColumn();
     $stmt = $pdo->prepare(
         'SELECT id, title, content, created_at
          FROM posts
@@ -204,7 +207,7 @@ $posts = $stmt->fetchAll();
 <?php endif; ?>
 
     <footer class="site-footer">
-        <p>Basic CRUD Application · ApexPlanet Internship Task 2</p>
+        <p>Secure Blog Application · ApexPlanet Internship Task 4</p>
     </footer>
 </body>
 </html>
